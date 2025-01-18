@@ -56,6 +56,6 @@ async function createPostAction ({request}) {
 
 
 
-export { Createpost, createPostAction }
+export { Createpost, createPostAction, createPostRequest }
 // export { Createpost }
 
