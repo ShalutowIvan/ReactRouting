@@ -4,14 +4,14 @@ import { redirect, useNavigation } from 'react-router-dom'
 
 function Createpost() {
 
-	// const navigation = useNavigation()
+	const navigation = useNavigation()
 	// submitting={navigation.state === 'submitting'}
 
 	return (
 		<div>
 			<h1>Create a post</h1>
 
-			<NewPost />
+			<NewPost submitting={navigation.state === 'submitting'} />
 
 
 

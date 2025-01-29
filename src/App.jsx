@@ -51,24 +51,3 @@ function App() {
 
 export default App
 
-
-
-      // <Routes>
-      //   <Route path="/" element={<Layout />}>
-      //     <Route index element={<Homepage />} />        
-      //     <Route path="posts" element={<Blogpage />} />          
-      //     <Route path="posts/:id" element={<Singlepage />} />
-          
-      //     <Route path="posts/:id/edit" element={<Editpost />} />
-      //     <Route path="about" element={<Aboutpage />} />
-      //     <Route path="about-us" element={<Navigate to="/about" replace />} />
-      //     <Route path="*" element={<Notfoundpage />} />
-          
-      //     {/*<Route path="posts/new" element={<Createpost />} />*/}
-      //     <Route path="posts/new" element={
-      //       <Createpost />
-      //     } action={createPostAction} />
-
-
-      //   </Route>
-      // </Routes>

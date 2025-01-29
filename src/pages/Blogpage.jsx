@@ -1,14 +1,18 @@
-import React from 'react';
-import { useState, useEffect } from 'react'
-import { Link, useLocation, NavLink, useNavigate, Navigate, useSearchParams } from 'react-router-dom'
+import {React, Suspense} from 'react';
+// import { useState, useEffect } from 'react'
+import { Link, useLocation, useSearchParams, useLoaderData, Await, data } from 'react-router-dom'
+
 import { BlogFilter } from '../components/BlogFilter';
 
 
 
 
 
-export default function Blogpage() {
-	const [posts, setPosts] = useState([]);
+function Blogpage() {
+	const {posts} = useLoaderData()
+
+
+	// const [posts, setPosts] = useState([]);
 	// console.log(useLocation());
 	// const [searchParams, setSearchParams] = useSearchParams();
 
@@ -17,11 +21,11 @@ export default function Blogpage() {
 
     // const startsFrom = latest ? 80 : 1;
 
-	useEffect(() => {
-		fetch('https://jsonplaceholder.typicode.com/posts')
-			.then(res => res.json())
-			.then(data => setPosts(data))
-	}, [])
+	// useEffect(() => {
+	// 	fetch('https://jsonplaceholder.typicode.com/posts')
+	// 		.then(res => res.json())
+	// 		.then(data => setPosts(data))
+	// }, [])
 
 	return (
 		<div>
@@ -30,15 +34,27 @@ export default function Blogpage() {
 
 			<h1><Link to="/posts/new">Создать пост</Link></h1>
 
+			<Suspense fallback={<h2>Loading...</h2>}>
+				<Await resolve={posts}>
+					{
+						(resolvedPosts) => (
+							<>
+								{
+								resolvedPosts.map(post => (
+									<Link key={post.id} to={`/posts/${post.id}`}>{/*это переход по ссылке Singlepage и он отрисовывает наш id*/}
+										<li>{post.title}</li>{/*тут просто список постов*/}
+									</Link>
+								))
+								}
+
+							</>)
+					}
+				</Await>
+			</Suspense>
+
 			
 
-			{
-				posts.map(post => (
-						<Link key={post.id} to={`/posts/${post.id}`}>{/*это переход по ссылке Singlepage и он отрисовывает наш id*/}
-							<li>{post.title}</li>{/*тут просто список постов*/}
-						</Link>
-					))
-			}
+			
 
 		</div>
 		)
@@ -46,3 +62,45 @@ export default function Blogpage() {
 }
 
 
+async function getPosts() {
+	const res = await fetch('https://jsonplaceholder.typicode.com/posts')
+	
+	// if (!res.ok) {
+	// 	throw new Response('', {status: res.status, statusText: 'Not Found'})
+	// }
+	// const contentLength = res.headers.get('Content-Length');
+	// const contentLength = 1
+	return res.json()
+	// return res.text()
+	
+	// let num = [contentLength, res.json()]
+	// return num
+}
+
+
+
+const blogLoader = async () => {
+	// console.log({request, params})
+	const posts = getPosts()
+	const posts2 = getPosts().then(successCallback, failureCallback)
+	// ps = posts[1]
+	// let l = JSON.stringify(posts).length
+	// console.log(l)
+	// console.log(posts)
+	// let num = JSON.stringify(posts)
+	// let num = JSON.parse(posts)
+	// console.log(posts["pending"])
+	console.log(posts2)
+
+	// if (!posts.length) {
+	// 	// console.log("ССЫЛКА не работает")
+	// 	throw data({message: 'not found', reason: 'неправильная ссылка'}, {status: 404})
+	// }
+
+	return {
+		posts
+	}
+}
+
+
+export { Blogpage, blogLoader }
