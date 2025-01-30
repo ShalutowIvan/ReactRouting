@@ -70,9 +70,10 @@ async function getPosts() {
 	// }
 	// const contentLength = res.headers.get('Content-Length');
 	// const contentLength = 1
+	// const q = await res.json() 
 	return res.json()
-	// return res.text()
 	
+	// return res.text()
 	// let num = [contentLength, res.json()]
 	// return num
 }
@@ -81,8 +82,16 @@ async function getPosts() {
 
 const blogLoader = async () => {
 	// console.log({request, params})
-	const posts = getPosts()
-	const posts2 = getPosts().then(successCallback, failureCallback)
+	const posts = await getPosts()
+	// console.log(posts.length)
+	// posts.then( (massiv) => {		
+	// 		console.log(massiv.length)
+	// 		// if (massiv.length == 100) {
+	// 		// 	throw data({message: 'not found', reason: 'неправильная ссылка'}, {status: 404})		
+	// 		// }
+	// 	}
+	// 	)
+	// console.log(data);
 	// ps = posts[1]
 	// let l = JSON.stringify(posts).length
 	// console.log(l)
@@ -90,16 +99,18 @@ const blogLoader = async () => {
 	// let num = JSON.stringify(posts)
 	// let num = JSON.parse(posts)
 	// console.log(posts["pending"])
-	console.log(posts2)
+	// console.log(a)
 
-	// if (!posts.length) {
-	// 	// console.log("ССЫЛКА не работает")
-	// 	throw data({message: 'not found', reason: 'неправильная ссылка'}, {status: 404})
-	// }
+	if (!posts.length) {
+		// console.log("ССЫЛКА не работает")
+		throw data({message: 'not found', reason: 'неправильная ссылка'}, {status: 404})
+	}
 
 	return {
 		posts
 	}
+
+	
 }
 
 
