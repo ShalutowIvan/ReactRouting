@@ -5,7 +5,7 @@ import Homepage from "./pages/Homepage";
 import { Blogpage, blogLoader } from "./pages/Blogpage";
 import { Singlepage, postLoader } from "./pages/Singlepage";
 
-import { Editpost} from "./pages/Editpost";
+import { Editpost, updatePostAction } from "./pages/Editpost";
 import Aboutpage from "./pages/Aboutpage";
 import Notfoundpage from "./pages/Notfoundpage";
 import {Createpost, createPostAction} from "./pages/Createpost";
@@ -20,7 +20,9 @@ const Router = createBrowserRouter(createRoutesFromElements(
         <Route path="posts" element={<Blogpage />} loader={blogLoader} errorElement={<ErrorPage />} />
         <Route path="posts/:id" element={<Singlepage />} loader={postLoader} />
 
-        <Route path="posts/:id/edit" element={<Editpost />}  />
+        <Route path="posts/:id/edit" element={<Editpost />} loader={postLoader} action={updatePostAction}/>
+
+
         <Route path="about/*" element={<Aboutpage />}>
             <Route path='contacts' element={<p>Our contacts</p>} />
             <Route path='team' element={<p>Our team</p>} />
