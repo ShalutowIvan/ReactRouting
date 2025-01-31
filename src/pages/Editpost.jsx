@@ -4,14 +4,14 @@ import { UpdatePost } from "../components/UpdatePost";
 
 function Editpost() {
 	// const {id} = useParams();
-	// const data = useActionData()
+	const data = useActionData()
 	const {post, id} = useLoaderData()
 	const navigation = useNavigation() 
 	
 
 	return (
 		<div>
-			{/*{data?.message && <div style={{color: 'blue'}}>{data.message}</div>}*/}
+			{data?.message && <div style={{color: 'blue'}}>{data.message}</div>}
 			<h1>Edit a post {id}</h1>
 			<UpdatePost {...post} submitting={navigation.state === 'submitting'} />
 		</div>
@@ -24,6 +24,7 @@ const updatePost = async (post) => {
 		method: 'PUT',
 		body: post
 	})
+	return res.json()
 }
 
 

@@ -384,20 +384,38 @@ const updatePost = async (post) => {
 }
 
 параметр post в него передаем объект из formData
-
+почему то id не указали, посмотрим что дальше
 в нашем случае мы просто передаем объект
 и не передаем body: JSON.stringify({ title, body, userId })
 и это headers: { 'Content-Type': 'application/json' },
 тут само все норм будет
+body: JSON.stringify({ title, body, userId }) это можно и передать, но пока и так норм сработает, так можно, мы передали просто post, это объект из формы будет. В этот параметр будет передаваться formData
 formData сама по себе распарсится
-далее можно вернуть в updatePostAction какой-то message
+//эта функция отправляет измененные данные на сервер
+const updatePost = async (post) => {
+	const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${post.get('id')}`, {
+		method: 'PUT',
+		body: post
+	})
+}
+
+в updatePostAction мы вызываем updatePost, и передаем в нее formData.
+в updatePostAction возвращаем какой-то message
+то есть мы изменили пост, и получим сообщение. И отобразим его на странице
+
 также для получения сообщения есть хук useActionData()
 его импортируем из react-router-dom
+
+
 в методе Editpost создадим константу const data = useActionData()
-и выведем ее в jsx
+он возвращает объект, который мы создадим. Этот хук берет текст из action который он возвращает. 
+Далее выведем ее сообщение в data в jsx
+
 {data?.message && <div style={{color: 'blue'}}>{data.message}</div>}
+
 тут если не пусто в сообщении, то оно выведется
-в нашем случае мы не редиректимся. Тут по случаю
+в нашем случае мы не редиректимся. Тут по случаю. То есть как бы кнопка сохранить, мы зашли, измененения внесли, и сохранили. Далее можем переходить на другие ссылки. 
+
 также можно прикрутить валидацию, пока не сложную
 if (!formData.get("title") || !formData.get("body")) {
 		return {message: 'Все поля обязательны!'}
