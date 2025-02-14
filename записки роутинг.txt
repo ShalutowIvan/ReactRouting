@@ -209,9 +209,102 @@ location поможет работать в приватными роутами
 
 это видео: https://www.youtube.com/watch?v=jv0ckzkKYzU&list=PLiZoB8JBsdznY1XwBcBhHL9L7S_shPGVE&index=5
 ост 10:40
-там далее приватные роуты, пригодится при авторизации
-пока пошел делать просто отображение товаров в проекте
-пропустил уроки и перешел к последнему
+Продолжение приватность!!!!!!!!!!!!!!!!!!!!!!!!!!
+создал файл RequireAuth, и в нем компонент RequireAuth
+перейдм в него
+в этом компоненте будет параметр children, в роли children будут выступать любая страница. То есть страница, которая будет скрываться авторизацией. То есть не видна без авторизации, она будет дочерней у компонента авторизации
+если авторизация тру, то отрисовываем страницу дочку, либо не отрисовываем
+
+if (!auth) {//если тру то возвращаем компонент Navigate. Если фолз, то что то другое. То что будет возвращать данный компонент RequireAuth
+		return <Navigate to='/login' state={{from: location}} />
+	}
+без авторизации можно возвращать брать инфу из state со значением location, как это делать пока не понятно
+создадим файл для страницы авторизации Loginpage.jsx
+
+напишем там функцию:
+
+const Loginpage = () => {
+	const navigate = useNavigate()
+	const location = useLocation()
+
+	const fromPage = location.state?.from?.pathname || '/'
+
+	return (
+		<div>
+			<h1>Login page</h1>
+			{fromPage}
+		</div>
+		
+		)
+}
+тут юзаем location, и берем из нее путь
+добавим роут в файл Router с логином
+и импортируем RequireAuth. И обернем компонент Createpost в наш компонент RequireAuth
+это для проверки авторизованы мы или нет
+такой роут получился
+<Route path="posts/new" element={
+            <RequireAuth>    
+                <Createpost />
+            </RequireAuth>
+        } action={createPostAction} />
+при такой реализации, когда пользак перейдет по ссылке posts/new произойдет редирект на RequireAuth в случае если пользак не авторизован и параметр auth из RequireAuth равен фолз. И RequireAuth делает перекидывает на роут Loginpage с путем /login, который соответсвует компоненту Loginpage.
+Если пользак уже был авторизован, то мы попадем на children, а children это Createpost.
+Есть несколько способов авторизации. Через Redux, через React context
+Создадим файл AuthProvider.jsx в папке hoc
+обернем все наши роуты в компонент AuthProvider. 
+Точнее не роуты, которые в файле Router.jsx, а в файле App.jsx компонент <RouterProvider router={Router} /> нужно обернуть в тег <AuthProvider>. Также <AuthProvider> нужно импортировать в App.jsx
+
+Это означает что мы можем какую то инфу достать из AuthProvider.
+функция AuthProvider
+
+export const AuthProvider = ({children}) => {
+	const [user, setUser] = useState(null);
+	const signin = (newUser, cb) => {
+		setUser(newUser);
+		cb();
+	}
+	const signout = (cb) => {
+		setUser(null);
+		cb();
+	}
+
+	const value = {user, signin, signout}
+
+
+	return <AuthContext.Provider value={value}>
+		{children}
+	</AuthContext.Provider>
+
+}
+
+так как мы в этой функции прописали <AuthContext.Provider value={value}>
+то теперь из любого роута можно получить значение контекста value через хук useContext. 
+и создадим кастомный хук useAuth
+в нем пропишем функцию: 
+
+import { useContext } from 'react'
+import { AuthContext } from '..hoc/AuthProvider'
+
+export function useAuth() {
+	return useContext(AuthContext)
+}
+
+он будет подтягивать контекст AuthContext из AuthProvider
+его будем вызывать при обращении к конектстуconst value = {user, signin, signout} для удобства сделали так
+и переделаем RequireAuth, чтобы подтягивался юзер, если его нет, то будет фолз и переадресация
+берем объект const {signin} = useAuth()
+через наш хук. И потом его используем. 
+
+теперь сделаем выход из учетки - разлогинивание
+
+
+
+<AuthProvider>
+
+
+
+
+
 
 
 

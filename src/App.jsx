@@ -1,6 +1,8 @@
 import Router from "./Router"
 import './index.css'
 import { RouterProvider } from "react-router-dom"
+import { AuthProvider } from "./hoc/AuthProvider";
+
 
 // import { Route, Navigate, RouterProvider, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
 // // import { createBrowserRouter, createRoutesFromElements, Navigate, Route } from "react-router-dom";
@@ -42,10 +44,11 @@ function App() {
   
 
   return (
+    <AuthProvider>
     
-      <RouterProvider router={Router} />
+        <RouterProvider router={Router} />
 
-        
+    </AuthProvider>
   )
 }
 

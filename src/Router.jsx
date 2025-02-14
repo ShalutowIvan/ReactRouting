@@ -12,9 +12,18 @@ import {Createpost, createPostAction} from "./pages/Createpost";
 import './index.css'
 import { ErrorPage } from "./pages/ErrorPage";
 
+//авторизация
+import { Loginpage } from "./pages/Loginpage";
+import { RequireAuth } from "./hoc/RequireAuth";
+import { AuthProvider } from "./hoc/AuthProvider";
+
+
+
+
 // updatePostAction
 
 const Router = createBrowserRouter(createRoutesFromElements(
+    
     <Route path="/" element={<Layout />} >
         <Route index element={<Homepage />} />
         <Route path="posts" element={<Blogpage />} loader={blogLoader} errorElement={<ErrorPage />} />
@@ -35,9 +44,18 @@ const Router = createBrowserRouter(createRoutesFromElements(
 
     
         <Route path="posts/new" element={
-            <Createpost />
+            <RequireAuth>    
+                <Createpost />
+            </RequireAuth>
         } action={createPostAction} />
+
+        <Route path="login" element={<Loginpage />} />
+        
+
+
     </Route>
+    
+    
 ))
 
 export default Router
